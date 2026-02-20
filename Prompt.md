@@ -1,10 +1,3 @@
-from google import genai
-
-# The client gets the API key from the environment variable `GEMINI_API_KEY`.
-client = genai.Client()
-
-# Consulta formateada para mejor legibilidad
-consulta = """
 # Objetivo
 Localizar y evaluar un Plan de Protección contra Incendios Forestales Comunitario (CWPP - Community Wildfire Protection Plan) para Atlantic County, New Jersey, que cumpla con criterios específicos. Además, se deben proporcionar enlaces de verificación y a los documentos fuente.
 
@@ -35,21 +28,32 @@ Si encuentras un plan que cumple con los criterios, debes proporcionar la inform
 - **Enlace al plan CWPP original:** (Si está disponible en línea)
 - **Enlaces a todas las actualizaciones:** (Lista de enlaces a cada versión posterior al plan original, si están disponibles)
 
-**Ejemplo de búsqueda:** Atlantic County, New Jersey.
+# Formato de Tabla Adicional
+Además del formato anterior, debes proporcionar una fila de tabla con los siguientes campos, utilizando "---" para los campos de enlace cuando no exista un plan o actualización correspondiente. Esta fila debe estar en texto plano, con los valores separados por tabulaciones o en un formato que pueda ser copiado fácilmente a una hoja de cálculo. Se prefiere el uso de tabulaciones.
+
+**Campos:** County, State, Region, Link_plan_original, Link_plan_update1, Link_plan_update2, Link_plan_update3, Notes
+
+- **County:** El nombre del condado (Atlantic).
+- **State:** Siglas a dos letras del estado (New Jersey).
+- **Region:** La región según la clasificación de la Asociación Nacional de Condados (NACo) u otra referencia común. Para New Jersey, la región es "Northeast".
+- **Link_plan_original:** Enlace directo al documento del plan original, si está disponible. Si no, "---".
+- **Link_plan_update1:** Enlace directo a la primera actualización del plan, si existe. Si no, "---".
+- **Link_plan_update2:** Enlace directo a la segunda actualización, si existe. Si no, "---".
+- **Link_plan_update3:** Enlace directo a la tercera actualización, si existe. Si no, "---".
+- **Notes:** Cualquier nota relevante, como la existencia de otros planes (ej. Plan de Mitigación de Peligros), o aclaraciones sobre el CWPP encontrado.
+
+**Ejemplo de fila (cuando no hay CWPP):**
+Monroe	NY	Northeast	---	---	---	---	County has Hazard Mitigation Plan with multiple updates, latest 2023 original 2017
+
+En caso de que encuentres un CWPP válido, completa los enlaces correspondientes. Por ejemplo, si el plan original está en `http://ejemplo.com/original.pdf`, la primera actualización en `http://ejemplo.com/update1.pdf`, y no hay más, pondrías esos enlaces y "---" en los restantes.
+
+# Ejemplo de búsqueda:
+Atlantic County, New Jersey.
 
 <search_instructions>
 Debes buscar en fuentes oficiales y confiables como:
 - Sitios web del gobierno de Atlantic County (ej. su departamento de planificación, servicios de emergencia o comisión forestal).
-- El Departamento de Protección Ambiental de New Jersey (NJDEP) o su equivalente forestal/de gestión de emergencias.
+- El Departamento de Protección Ambiental de New Jersey o su equivalente forestal/de gestión de emergencias.
 - Asociaciones regionales de planificación o gobiernos locales.
 - El portal de FEMA (Agencia Federal para el Manejo de Emergencias) que pueda tener registros de CWPP aprobados.
 </search_instructions>
-"""
-
-response = client.models.generate_content(
-    model="gemini-3-flash-preview",
-    contents=consulta
-)
-
-print(response.text
-)
